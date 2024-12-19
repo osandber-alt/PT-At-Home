@@ -1,0 +1,42 @@
+package com.example.ptathome.externalresources.network
+
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import com.example.ptathome.externalresources.RetrofitHandler
+import com.example.ptathome.externalresources.gson.GsonManager
+import javax.inject.Inject
+
+class NetworkManager @Inject constructor(
+    private var application: Application,
+    private var gsonManager: GsonManager,
+) {
+
+    //TODO: Implement
+
+    fun isOnline():Boolean{
+        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        val network = connectivityManager?.activeNetwork
+        val capabilities = connectivityManager?.getNetworkCapabilities(network)
+        if(capabilities != null &&
+            (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))){
+            println("network")
+            return true
+        }
+        else{
+            println("no network")
+            return false
+        }
+    }
+
+    // TODO: Insert specific RestService Here!!!
+    fun runNetworkService(baseURL: String, apiKey: String, topic: String, title: String) {
+        println("Is running network service")
+        gsonManager.printCurrentJsonData()
+        val job = RetrofitHandler.runService(baseURL,apiKey,topic,title)
+
+    }
+
+}
