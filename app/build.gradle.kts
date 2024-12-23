@@ -58,6 +58,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // dempendency for filament (3D render)
+    implementation("com.google.android.filament:filament-android:1.36.0")
+    implementation("com.google.android.filament:gltfio-android:1.36.0")
+    implementation("com.google.android.filament:filament-utils-android:1.36.0")
+
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
     //ksp("com.google.dagger:hilt-android-compiler:2.51.1")
