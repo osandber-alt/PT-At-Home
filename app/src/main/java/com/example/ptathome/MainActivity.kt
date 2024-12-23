@@ -6,7 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
+import com.example.ptathome.externalresources.htmlparser.parseHtml
 import com.example.ptathome.ui.screens.HomeScreen
+import com.example.ptathome.ui.screens.htmlText
+import com.example.ptathome.ui.screens.testHetml
 import com.example.ptathome.ui.theme.PTAtHomeTheme
 import com.example.ptathome.ui.viewmodel.ViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,8 +46,14 @@ class MainActivity : ComponentActivity() {
                     it.loadUrl(mUrl)
                 })*/
 
+                //TODO: Keep
+                parseHtml(
+                    testHetml//htmlText
+                )
                 //WebView2(this.baseContext)
-                HomeScreen(viewModel)
+
+                //TODO: Keep
+                //HomeScreen(viewModel)
             }
         }
     }

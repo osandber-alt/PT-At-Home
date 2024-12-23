@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.squareup.retrofit.retrofit)
     implementation(libs.squareup.retrofit.converter)
 
+    implementation("org.jsoup:jsoup:1.14.3")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
