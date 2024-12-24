@@ -1,5 +1,5 @@
 package com.example.ptathome.ui.theme.Object3D
-
+/*
 import android.content.Context
 import android.os.Bundle
 import android.view.SurfaceView
@@ -68,4 +68,4 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
         Engine.destroy(filamentEngine)
     }
-}
+}*/

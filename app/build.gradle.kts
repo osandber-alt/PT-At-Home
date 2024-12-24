@@ -63,6 +63,16 @@ dependencies {
     implementation("com.google.android.filament:gltfio-android:1.36.0")
     implementation("com.google.android.filament:filament-utils-android:1.36.0")
 
+    //WebView
+    implementation("androidx.webkit:webkit:1.8.0")
+
+    //Rajawali 3D
+    implementation("org.rajawali3d:rajawali:1.1.770")
+    implementation("org.rajawali3d:rajawali-util:1.1.770")
+    implementation("org.rajawali3d:rajawali-lights:1.1.770")
+    implementation ("com.github.rajawali:rajawali:1.2.197")
+
+
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
     //ksp("com.google.dagger:hilt-android-compiler:2.51.1")
