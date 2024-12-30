@@ -59,26 +59,29 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // dempendency for filament (3D render)
-    implementation("com.google.android.filament:filament-android:1.36.0")
     implementation("com.google.android.filament:gltfio-android:1.36.0")
-    implementation("com.google.android.filament:filament-utils-android:1.36.0")
+   // implementation("com.google.android.filament:filament-utils-android:1.36.0")
+    //implementation("com.google.android.filament:filament-android:1.32.0")
+    implementation("com.google.android.filament:filament-gltfio-android:1.32.2")
+   // implementation("com.google.android.filament:filament-android:1.56.4")
 
     //WebView
-    implementation("androidx.webkit:webkit:1.8.0")
+    //implementation("androidx.webkit:webkit:1.8.0")
 
     //Rajawali 3D
-    implementation("org.rajawali3d:rajawali:1.1.770")
-    implementation("org.rajawali3d:rajawali-util:1.1.770")
-    implementation("org.rajawali3d:rajawali-lights:1.1.770")
-    implementation ("com.github.rajawali:rajawali:1.2.197")
+   // implementation("org.rajawali3d:rajawali:1.1.770")
+   // implementation("org.rajawali3d:rajawali-util:1.1.770")
+   // implementation("org.rajawali3d:rajawali-lights:1.1.770")
+   // implementation ("com.github.rajawali:rajawali:1.2.197")
 
 
     implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation(libs.androidx.appcompat)
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
-    //ksp("com.google.dagger:hilt-android-compiler:2.51.1")
-    //implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
-    //ksp("androidx.hilt:hilt-compiler:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("androidx.room:room-ktx:2.6.1")
