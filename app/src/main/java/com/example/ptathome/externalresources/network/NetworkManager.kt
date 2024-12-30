@@ -6,14 +6,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.example.ptathome.externalresources.RetrofitHandler
 import com.example.ptathome.externalresources.gson.GsonManager
+import com.example.ptathome.model.MyDocument
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class NetworkManager @Inject constructor(
     private var application: Application,
     private var gsonManager: GsonManager,
 ) {
-
-    //TODO: Implement
 
     fun isOnline():Boolean{
         val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
@@ -32,11 +32,18 @@ class NetworkManager @Inject constructor(
     }
 
     // TODO: Insert specific RestService Here!!!
-    fun runNetworkService(baseURL: String, apiKey: String, topic: String, title: String) {
+    fun <T:Any>runNetworkService(
+        serviceName: String,
+        baseURL: String,
+        apiKey: String,
+        topic: List<String>,
+        title: String,
+        receiver: T,
+        _isComplete: MutableStateFlow<Boolean>
+    ) {
         println("Is running network service")
         gsonManager.printCurrentJsonData()
-        val job = RetrofitHandler.runService(baseURL,apiKey,topic,title)
-
+        val job = RetrofitHandler.runService(serviceName,baseURL,apiKey,topic,title,receiver,_isComplete)
     }
 
 }

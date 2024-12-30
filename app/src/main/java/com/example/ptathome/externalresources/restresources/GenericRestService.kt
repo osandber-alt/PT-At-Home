@@ -1,22 +1,33 @@
 package com.example.ptathome.externalresources.restresources
 
 import com.example.ptathome.externalresources.network.NetworkManager
+import com.example.ptathome.model.MyDocument
+import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class GenericRestService(
     private val baseURL: String,
     private val apiKey: String,
-    private val topic:String,
-    private val title:String
+    private val topic:List<String>,
+    private var title:String,
 ) : RestInterface() {
-    override fun runRestService(networkManager: NetworkManager) {
+    override fun <T:Any>runRestService(
+        networkManager: NetworkManager,
+        receiver: T,
+        _isComplete: MutableStateFlow<Boolean>,
+        bodyPartSearch: String
+    ) {
         println("Run service")
-        println("Base url = $baseURL")
-        println("API key = $apiKey")
-        println("Topic = $topic")
-        println("Title = $title")
+        //println("Base url = $baseURL")
+        //println("API key = $apiKey")
+        //println("Topic = $topic")
+        //println("Title = $title")
 
         if(networkManager.isOnline()){
-            networkManager.runNetworkService(baseURL, apiKey, topic,title)
+            var theLocal = this.javaClass.name
+            theLocal = theLocal.replace("com.example.ptathome.externalresources.restresources.","")
+            //println("The service name: ${theLocal}")
+            setTitle(bodyPartSearch)
+            networkManager.runNetworkService(theLocal,baseURL, apiKey, topic,title,receiver,_isComplete)
         }
 
     }
@@ -33,7 +44,11 @@ abstract class GenericRestService(
         return title
     }
 
-    override fun getTopic(): String {
+    override fun getTopic(): List<String> {
         return topic
+    }
+
+    override fun setTitle(value: String) {
+        title = value
     }
 }

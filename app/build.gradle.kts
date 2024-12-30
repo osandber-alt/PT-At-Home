@@ -73,6 +73,7 @@ dependencies {
 
     implementation(libs.squareup.retrofit.retrofit)
     implementation(libs.squareup.retrofit.converter)
+    implementation(libs.squareup.retrofit.scalar.converter)
 
     implementation("org.jsoup:jsoup:1.14.3")
 

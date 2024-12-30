@@ -1,9 +1,6 @@
 package com.example.ptathome.ui.screens
 
-import android.content.Context
-import android.text.Html
-import android.view.ViewGroup
-import android.webkit.WebView
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +18,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.ptathome.ui.viewmodel.ViewModel
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.ptathome.externalresources.restresources.TypeOfService
+import com.example.ptathome.ui.customcomposables.YoutubeVideoPlayer
+import kotlinx.coroutines.flow.MutableStateFlow
 
 val htmlText =  "<h2>What is Android?</h2>" + "<p>Android is an open source and Linux-based <b>Operating System</b> for mobile devices such as smartphones and tablet computers. Android was developed by the <i>Open Handset Alliance</i>, led by Google, and other companies.</p>" + "<p>Android offers a unified approach to application development for mobile devices which means developers need only develop for Android, and their applications should be able to run on different devices powered by Android.</p>" + "<p>The first beta version of the Android Software Development Kit (SDK) was released by Google in 2007 whereas the first commercial version, Android 1.0, was released in September 2008.</p>";
 
@@ -585,8 +598,18 @@ val testHetml =
     """.trimIndent()
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
+
+    val currentDocument by viewModel.currentDocument.collectAsState()
+    var currentSize:MutableStateFlow<Int> = MutableStateFlow(-1)
+    val isComplete by viewModel.isComplete.collectAsState()
+    val isComplete2 by viewModel.isComplete2.collectAsState()
+    val lastService by viewModel.lastService.collectAsState()
+
+    var bodyPartSearch by remember { mutableStateOf("") }    // Longitude state
+
     Scaffold(
     ) {
         Column(
@@ -611,68 +634,137 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                         color = Color.DarkGray
                     )
 
+                    TextField(
+                        value = bodyPartSearch,
+                        onValueChange = { bodyPartSearch = it },
+                        label = {
+                            Text(
+                                text = "Search body part",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                        },
+                        //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        maxLines = 1,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedLabelColor = Color.DarkGray,
+                            unfocusedLabelColor = Color.DarkGray
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
+
+
+                    if(isComplete2 && lastService == TypeOfService.Youtube  || (isComplete2 && lastService == TypeOfService.Both)){
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(text = "training video")
+
+                        Spacer(Modifier.height(16.dp))
+                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
+                            currentSize.value = it.size.width
+                        }){
+                            YoutubeVideoPlayer(
+                                videoId = currentDocument.getTrainingVideoId()[0]
+                                //"bHQqvYy5KYo" Keep for now!!!
+                                //,currentSize.value
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(text = "Rehab video")
+
+                        Spacer(Modifier.height(16.dp))
+                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
+                            currentSize.value = it.size.width
+                        }){
+                            YoutubeVideoPlayer(
+                                videoId = currentDocument.getRehabVideoId()[0]
+                                //"bHQqvYy5KYo" Keep for now!!!
+                                //,currentSize.value
+                            )
+                        }
+                    }
+
                     Spacer(Modifier.height(16.dp))
 
 
-                    //TODO: Present Wikipedia summary, not implemented
-                    Text(
-                        text = "Present wikipedia summary here",
-                        color = Color.DarkGray
-                    )
+                    if(isComplete){
 
-                    Spacer(Modifier.height(16.dp))
+                        Box(modifier = Modifier.height(120.dp)
+                            .verticalScroll(rememberScrollState())){
+                            Text(
+                                text = currentDocument.getSummary() ,
+                                color = Color.DarkGray
+                            )
+                        }
+                    }
 
-                    //TODO: Present Youtube info
-                    Text(
-                        text = "Present Youtube info here",
-                        color = Color.DarkGray
-                    )
 
                     Spacer(Modifier.height(16.dp))
 
                     Button(
-                        onClick = { viewModel.startService() }
+                        onClick = { viewModel.startService(
+                            setOf(TypeOfService.Wikipedia,TypeOfService.Youtube),bodyPartSearch
+                        ) }
                     ) {
                         // TODO: Currently, only wikipedia service is implemented
                         Text(
-                            text = "Test print both services",
+                            text = "Run both Wikipedia and Youtube services",
                             color = Color.White
                         )
                     }
 
                     // TODO: Get Wikipedia info, not yet implemented
-                    Button(
-                        onClick = {  }
+                    /*Button(
+                        onClick = {
+                            viewModel.startService(
+                                setOf(TypeOfService.Wikipedia),bodyPartSearch
+                            )
+                        }
                     ) {
                         Text(
-                            text = "Get Wikipedia summary",
+                            text = "Run Wikipedia service",
                             color = Color.White
                         )
                     }
                     //TODO: Get Youtube detail, not yet implemented
                     Button(
-                        onClick = { }
+                        onClick = {
+                            viewModel.startService(
+                                setOf(TypeOfService.Youtube),bodyPartSearch
+                            )
+                        }
                     ) {
                         Text(
-                            text = "Get youtube detail",
+                            text = "Run Youtube service",
                             color = Color.White
                         )
+                    }*/
+
+                    if(isComplete){
+                        Box(modifier = Modifier.height(120.dp)
+                            .verticalScroll(rememberScrollState())){
+                            Text(
+                                text =  currentDocument.getAllSections("section").toString(),
+                                color = Color.DarkGray
+                            )
+                        }
                     }
 
-                    Spacer(Modifier.height(16.dp))
-
-                    // TODO: Part of an experiment to load in entire HTML file into the homescreen.
-                    //  It is not implemented.
-                    Text(
-                        text = "HTML text here",//Html.fromHtml(htmlText,0).toString(),
-                        color = Color.DarkGray
-                    )
 
                 }
             }
         }
     }
 }
-
-
-

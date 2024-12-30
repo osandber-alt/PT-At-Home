@@ -72,7 +72,7 @@ constructor()
 
     fun printCurrentJsonData() {
         val y = gson.fromJson(summaryJsonData,xGon::class.java)
-        println(y.extract)
+        //println(y.extract)
     }
 
     //TODO: Modify
