@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 val htmlText =  "<h2>What is Android?</h2>" + "<p>Android is an open source and Linux-based <b>Operating System</b> for mobile devices such as smartphones and tablet computers. Android was developed by the <i>Open Handset Alliance</i>, led by Google, and other companies.</p>" + "<p>Android offers a unified approach to application development for mobile devices which means developers need only develop for Android, and their applications should be able to run on different devices powered by Android.</p>" + "<p>The first beta version of the Android Software Development Kit (SDK) was released by Google in 2007 whereas the first commercial version, Android 1.0, was released in September 2008.</p>";
 
-// TODO: The response file for the wikipedia article "shoulder"
+// The response file for the wikipedia article "shoulder"
 val testHetml =
     """
         <!DOCTYPE html>
@@ -718,14 +718,14 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                             setOf(TypeOfService.Wikipedia,TypeOfService.Youtube),bodyPartSearch
                         ) }
                     ) {
-                        // TODO: Currently, only wikipedia service is implemented
+
                         Text(
                             text = "Run both Wikipedia and Youtube services",
                             color = Color.White
                         )
                     }
 
-                    // TODO: Get Wikipedia info, not yet implemented
+
                     /*Button(
                         onClick = {
                             viewModel.startService(
@@ -738,7 +738,7 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                             color = Color.White
                         )
                     }
-                    //TODO: Get Youtube detail, not yet implemented
+
                     Button(
                         onClick = {
                             viewModel.startService(
