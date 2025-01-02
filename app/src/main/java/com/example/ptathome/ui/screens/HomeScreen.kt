@@ -32,6 +32,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.labb3.Screen
 import com.example.ptathome.externalresources.restresources.TypeOfService
 import com.example.ptathome.ui.customcomposables.YoutubeVideoPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -600,15 +602,11 @@ val testHetml =
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
+fun HomeScreen(navController: NavHostController, viewModel: ViewModel = hiltViewModel()) {
 
     val currentDocument by viewModel.currentDocument.collectAsState()
-    var currentSize:MutableStateFlow<Int> = MutableStateFlow(-1)
-    val isComplete by viewModel.isComplete.collectAsState()
-    val isComplete2 by viewModel.isComplete2.collectAsState()
-    val lastService by viewModel.lastService.collectAsState()
-
     var bodyPartSearch by remember { mutableStateOf("") }    // Longitude state
+    val isComplete by viewModel.isComplete.collectAsState()
 
     Scaffold(
     ) {
@@ -633,6 +631,15 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                         text = "Home Screen",
                         color = Color.DarkGray
                     )
+
+                    if(isComplete){
+                        Spacer(Modifier.height(16.dp))
+                        Text(
+                            text = "Current Document = ${currentDocument.getName()}",
+                            color = Color.DarkGray
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
 
                     TextField(
                         value = bodyPartSearch,
@@ -664,53 +671,6 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                     )
 
 
-                    if(isComplete2 && lastService == TypeOfService.Youtube  || (isComplete2 && lastService == TypeOfService.Both)){
-                        Spacer(Modifier.height(16.dp))
-
-                        Text(text = "training video")
-
-                        Spacer(Modifier.height(16.dp))
-                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                            currentSize.value = it.size.width
-                        }){
-                            YoutubeVideoPlayer(
-                                videoId = currentDocument.getTrainingVideoId()[0]
-                                //"bHQqvYy5KYo" Keep for now!!!
-                                //,currentSize.value
-                            )
-                        }
-
-                        Spacer(Modifier.height(16.dp))
-
-                        Text(text = "Rehab video")
-
-                        Spacer(Modifier.height(16.dp))
-                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                            currentSize.value = it.size.width
-                        }){
-                            YoutubeVideoPlayer(
-                                videoId = currentDocument.getRehabVideoId()[0]
-                                //"bHQqvYy5KYo" Keep for now!!!
-                                //,currentSize.value
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.height(16.dp))
-
-
-                    if(isComplete){
-
-                        Box(modifier = Modifier.height(120.dp)
-                            .verticalScroll(rememberScrollState())){
-                            Text(
-                                text = currentDocument.getSummary() ,
-                                color = Color.DarkGray
-                            )
-                        }
-                    }
-
-
                     Spacer(Modifier.height(16.dp))
 
                     Button(
@@ -725,41 +685,28 @@ fun HomeScreen(viewModel: ViewModel = hiltViewModel()) {
                         )
                     }
 
+                    Spacer(Modifier.height(16.dp))
 
-                    /*Button(
-                        onClick = {
-                            viewModel.startService(
-                                setOf(TypeOfService.Wikipedia),bodyPartSearch
-                            )
-                        }
+                    Button(
+                        onClick = { navController.navigate(Screen.WikipediaScreen.route) }
                     ) {
+
                         Text(
-                            text = "Run Wikipedia service",
+                            text = "Wikipedia screen",
                             color = Color.White
                         )
                     }
 
+                    Spacer(Modifier.height(16.dp))
+
                     Button(
-                        onClick = {
-                            viewModel.startService(
-                                setOf(TypeOfService.Youtube),bodyPartSearch
-                            )
-                        }
+                        onClick = { navController.navigate(Screen.VideoScreen.route) }
                     ) {
+
                         Text(
-                            text = "Run Youtube service",
+                            text = "Video Screen",
                             color = Color.White
                         )
-                    }*/
-
-                    if(isComplete){
-                        Box(modifier = Modifier.height(120.dp)
-                            .verticalScroll(rememberScrollState())){
-                            Text(
-                                text =  currentDocument.getAllSections("section").toString(),
-                                color = Color.DarkGray
-                            )
-                        }
                     }
 
 

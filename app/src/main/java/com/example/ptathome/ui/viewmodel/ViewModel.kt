@@ -22,9 +22,17 @@ interface PtHomeViewModelInterface{
     val isComplete2:StateFlow<Boolean>
     val lastService:StateFlow<TypeOfService>
 
+    val theDocumentsAsList: StateFlow<List<String>>
+    val theTrainingIDsAsList: StateFlow<List<String>>
+    val theRehabIDsAsList: StateFlow<List<String>>
+
     fun startService(aList: Set<TypeOfService>, bodyPartSearch: String):Boolean
     fun isServiceComplete():Boolean
-    fun setDocumentsByIndex(name: String,index:Int)
+    fun setDocumentsByIndex(index:Int)
+    fun getListOfDocuments():MutableList<MyDocument>
+    fun setNewDocument(myDocument: MyDocument)
+
+    fun updateContentListViews()
 }
 
 @HiltViewModel
@@ -33,6 +41,16 @@ class ViewModel @Inject constructor(
     @wikipedia private val wikipediaGenericRestService: RestInterface,
     private val networkManager: NetworkManager
 ): ViewModel(),PtHomeViewModelInterface {
+
+    private var _theDocumentsAsList = MutableStateFlow<List<String>>(emptyList())
+    override val theDocumentsAsList: StateFlow<List<String>>
+        get() = _theDocumentsAsList
+    private var _theTrainingIDsAsList = MutableStateFlow<List<String>>(emptyList())
+    override val theTrainingIDsAsList: StateFlow<List<String>>
+        get() = _theTrainingIDsAsList
+    private var _theRehabIDsAsList = MutableStateFlow<List<String>>(emptyList())
+    override val theRehabIDsAsList: StateFlow<List<String>>
+        get() = _theRehabIDsAsList
 
     private val _currentDocument = MutableStateFlow(MyDocument())
     override val currentDocument: StateFlow<MyDocument>
@@ -54,11 +72,35 @@ class ViewModel @Inject constructor(
 
     private var listOfMyDocument:MutableList<MyDocument> = mutableListOf()
 
-    override fun setDocumentsByIndex(name:String,index: Int) {
+    override fun updateContentListViews() {
+        _theTrainingIDsAsList.value = _currentDocument.value.getTrainingVideoId()
+        _theRehabIDsAsList.value = _currentDocument.value.getRehabVideoId()
+
+        val localList = listOfMyDocument
+        var local2 = mutableListOf<String>()
+        println("the length = ${localList.size}")
+        for (i in localList){
+            println("is it valid")
+            local2.add(i.getName())
+        }
+        println(local2)
+        _theDocumentsAsList.value = local2
+        println(_theDocumentsAsList.value)
+    }
+
+    override fun setDocumentsByIndex(index: Int) {
         if(listOfMyDocument.contains(_currentDocument.value)){
             _currentDocument.value = listOfMyDocument[index]
-            _currentDocument.value.setName(youtubeRestService.getTitle())
         }
+    }
+
+    override fun getListOfDocuments(): MutableList<MyDocument> {
+        return listOfMyDocument
+    }
+
+    override fun setNewDocument(myDocument: MyDocument) {
+        _currentDocument.value = myDocument
+        updateContentListViews()
     }
 
     override fun startService(aList: Set<TypeOfService>, bodyPartSearch: String):Boolean{
@@ -72,15 +114,21 @@ class ViewModel @Inject constructor(
         else {
             currentTime = System.nanoTime()
             _isComplete.value = false
-            if (_currentDocument.value.getName() != bodyPartSearch){
-                for(i in listOfMyDocument){
-                    if(i.getName() != _currentDocument.value.getName()){
-                        listOfMyDocument.add(_currentDocument.value)
-                        _currentDocument.value = MyDocument()
-                        break
-                    }
-                }
+            println("Current doc name = ${_currentDocument.value.getName()}")
+
+            if(_currentDocument.value.getName()==""){
+                listOfMyDocument.add(_currentDocument.value)
             }
+
+            else if (_currentDocument.value.getName() == bodyPartSearch){
+                        _currentDocument.value = MyDocument()
+            }
+
+            else if(_currentDocument.value.getName() != bodyPartSearch){
+                _currentDocument.value = MyDocument()
+                listOfMyDocument.add(_currentDocument.value)
+            }
+
 
             val job = GlobalScope.launch(Dispatchers.Default){
 

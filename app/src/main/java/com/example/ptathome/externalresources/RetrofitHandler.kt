@@ -132,6 +132,9 @@ class RetrofitHandler {
         ){
             // Define the URL of the RESTful API you want to call
 
+            if(receiver is MyDocument){
+                receiver.setName(title)
+            }
             for(i in topic){
                 if(i == "exercise"){
                     val jsonPlaceholderService =

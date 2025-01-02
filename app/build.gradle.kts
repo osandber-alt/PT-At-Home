@@ -75,6 +75,12 @@ dependencies {
     implementation(libs.squareup.retrofit.converter)
     implementation(libs.squareup.retrofit.scalar.converter)
 
+    implementation("androidx.paging:paging-runtime:3.3.5")
+    implementation("androidx.paging:paging-compose:3.3.5")
+    implementation ("androidx.paging:paging-runtime-ktx:3.3.5")
+
+
+
     implementation("org.jsoup:jsoup:1.14.3")
 
     testImplementation(libs.junit)

@@ -31,9 +31,12 @@ class MyDocument {
         this.rehabVideoId.add(videoId)
     }
 
+
     fun getTrainingVideoId() = trainingVideoId
+    fun getTrainingVideoIdByIndex(index:Int) = trainingVideoId[index]
 
     fun getRehabVideoId() = rehabVideoId
+    fun getrehabVideoIdByIndex(index:Int) = rehabVideoId[index]
 
     // Pair(string,string) = Pair(The text, The tags)
     private var theDocument: MutableList<Pair<String,String>> = mutableListOf()
