@@ -1,6 +1,7 @@
 package com.example.ptathome.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,9 +36,11 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.ptathome.R
 import com.example.ptathome.externalresources.restresources.TypeOfService
 import com.example.ptathome.ui.customcomposables.YoutubeVideoPlayer
+import com.example.ptathome.ui.viewmodel.combinedData
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -57,8 +60,8 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
     val videoRehabData by viewModel.theRehabIDsAsList.collectAsState()
 
     var data1 by remember { mutableStateOf<List<String>>(emptyList()) }
-    var data2 by remember { mutableStateOf<List<String>>(emptyList()) }
-    var data3 by remember { mutableStateOf<List<String>>(emptyList()) }
+    var data2 by remember { mutableStateOf<List<combinedData>>(emptyList()) }
+    var data3 by remember { mutableStateOf<List<combinedData>>(emptyList()) }
 
     var videoIndex by remember {  mutableStateOf("") }
     var videoIndex2 by remember {  mutableStateOf("") }
@@ -116,7 +119,7 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                     var expanded3 by remember { mutableStateOf(false) }
 
 
-                    Text(text = "Data")
+                    Text(text = "Document")
                     IconButton(onClick = { expanded = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.round_arrow_drop_down_24), // Replace with your menu icon
@@ -147,7 +150,7 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                             )
                         }
                     }
-
+                    Text(text = "Training")
                     IconButton(onClick = { expanded2 = true }) {
                         Icon(
                             painter = painterResource(id = R.drawable.round_arrow_drop_down_24), // Replace with your menu icon
@@ -155,18 +158,31 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                         )
                     }
 
+                    Text(text = "Rehab")
                     DropdownMenu(
                         expanded = expanded2,
                         onDismissRequest = { expanded2 = false }
                     ) {
                         data2.forEach { entryList ->
+                            Spacer(Modifier.height(16.dp))
                             DropdownMenuItem(
-                                text = { Text(entryList) },
+                                text = { Text(entryList.theData.second) },
                                 onClick = {
-                                    expanded2 = false
-                                    videoIndex = entryList
+                                    //expanded2 = false
+                                    //videoIndex = entryList.theData.first
                                 }
                             )
+                            Box{
+                                AsyncImage(
+                                    model = entryList.theImageLink,
+                                    contentDescription = null,
+                                    modifier = Modifier.clickable(onClick = {
+                                        expanded2 = false
+                                        videoIndex = entryList.theData.first
+                                    })
+                                )
+                            }
+
                         }
                     }
 
@@ -183,12 +199,24 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                     ) {
                         data3.forEach { entryList ->
                             DropdownMenuItem(
-                                text = { Text(entryList) },
+                                text = { Text(entryList.theData.second) },
                                 onClick = {
-                                    expanded3 = false
-                                    videoIndex2 = entryList
+                                    //expanded3 = false
+                                    //videoIndex2 = entryList.theData.first
                                 }
                             )
+
+                            Box{
+                                AsyncImage(
+                                    model = entryList.theImageLink,
+                                    contentDescription = null,
+                                    modifier = Modifier.clickable(onClick = {
+                                        expanded3 = false
+                                        videoIndex2 = entryList.theData.first
+                                    })
+                                )
+                            }
+
                         }
                     }
                 }
@@ -228,45 +256,40 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                             color = Color.DarkGray
                         )
 
-                        Spacer(Modifier.height(16.dp))
+                        if(videoIndex!= ""){
+                            Spacer(Modifier.height(16.dp))
 
-                        Text(text = "training video")
+                            Text(text = "training video")
 
-                        Spacer(Modifier.height(16.dp))
-
-                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                            currentSize.value = it.size.width
-                        }){
-                            if(videoIndex!= ""){
-                            YoutubeVideoPlayer(
-                                videoId = videoIndex
+                            Spacer(Modifier.height(16.dp))
+                            Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
+                                currentSize.value = it.size.width
+                            }){
+                                YoutubeVideoPlayer(
+                                    videoId = videoIndex
                                 //videoId = currentDocument.getTrainingVideoIdByIndex(0)
                                 //"bHQqvYy5KYo" Keep for now!!!
-                                //,currentSize.value
-                            )
+                                )
+                            }}
+
+                        if(videoIndex2!=""){
+                            Spacer(Modifier.height(16.dp))
+                            Text(text = "Rehab video")
+                            Spacer(Modifier.height(16.dp))
+
+                            Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
+                                currentSize.value = it.size.width
+                            })
+                            {
+                                YoutubeVideoPlayer(
+                                    videoId = videoIndex2
+                                    //"bHQqvYy5KYo" Keep for now!!!
+                                )
                             }
-                        }
-
-                        Spacer(Modifier.height(16.dp))
-
-                        Text(text = "Rehab video")
-
-                        Spacer(Modifier.height(16.dp))
-                        Box(modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                            currentSize.value = it.size.width
-                        }){
-                            if(videoIndex2!=""){
-                            YoutubeVideoPlayer(
-                                videoId = videoIndex2
-                                //"bHQqvYy5KYo" Keep for now!!!
-                                //,currentSize.value
-                            )
-                            }
-                        }
+                         }
                     }
 
                     Spacer(Modifier.height(16.dp))
-
 
                     Button(onClick = { navController.navigateUp() }) {
                         Text(

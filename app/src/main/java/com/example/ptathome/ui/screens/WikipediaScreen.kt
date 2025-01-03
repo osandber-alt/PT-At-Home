@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -106,12 +107,62 @@ fun WikipediaScreen(navController: NavHostController, viewModel: ViewModel = hil
                     }
 
                     if(isComplete){
-                        Box(modifier = Modifier.height(120.dp)
+                        Box(modifier = Modifier.fillMaxHeight()
                             .verticalScroll(rememberScrollState())){
-                            Text(
-                                text =  currentDocument.getAllSections("section").toString(),
-                                color = Color.DarkGray
-                            )
+                            Column {
+                                for (i in viewModel.currentDocument.value.getDocument()){
+                                    println(i.second)
+                                    if(i.second == "h1"){
+                                        Text(
+                                            text =  i.first,
+                                            color = Color.DarkGray,
+                                            fontSize = 50.sp,
+                                            lineHeight = 50.sp
+                                        )
+                                    }
+
+                                    else if(i.second == "h2"){
+                                        Text(
+                                            text =  i.first,
+                                            color = Color.DarkGray,
+                                            fontSize = 50.sp,
+                                            lineHeight = 50.sp
+                                        )
+                                    }
+
+                                    else if(i.second == "h3"){
+                                        Text(
+                                            text =  i.first,
+                                            color = Color.DarkGray,
+                                            fontSize = 50.sp,
+                                            lineHeight = 50.sp
+                                        )
+                                    }
+
+                                    else if(i.second == "h4"){
+                                        Text(
+                                            text =  i.first,
+                                            color = Color.DarkGray,
+                                            fontSize = 50.sp,
+                                            lineHeight = 50.sp
+                                        )
+                                    }
+
+                                    else{
+                                        Text(
+                                            text =  i.first,
+                                            color = Color.DarkGray,
+                                            fontSize = 10.sp,
+                                            lineHeight = 25.sp
+                                        )
+                                        Spacer(Modifier.height(16.dp))
+                                    }
+                                }
+                            }
+                            //Text(
+                            //    text =  currentDocument.getAllSections("section").toString(),
+                            //    color = Color.DarkGray
+                            //)
                         }
                     }
 

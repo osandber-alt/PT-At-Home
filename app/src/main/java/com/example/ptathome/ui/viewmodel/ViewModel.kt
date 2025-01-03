@@ -23,8 +23,8 @@ interface PtHomeViewModelInterface{
     val lastService:StateFlow<TypeOfService>
 
     val theDocumentsAsList: StateFlow<List<String>>
-    val theTrainingIDsAsList: StateFlow<List<String>>
-    val theRehabIDsAsList: StateFlow<List<String>>
+    val theTrainingIDsAsList: StateFlow<List<combinedData>>
+    val theRehabIDsAsList: StateFlow<List<combinedData>>
 
     fun startService(aList: Set<TypeOfService>, bodyPartSearch: String):Boolean
     fun isServiceComplete():Boolean
@@ -34,6 +34,11 @@ interface PtHomeViewModelInterface{
 
     fun updateContentListViews()
 }
+
+data class combinedData(
+    var theData:Triple<String, String,IntArray> = Triple("","", intArrayOf(0,0)),
+    var theImageLink:String = ""
+)
 
 @HiltViewModel
 class ViewModel @Inject constructor(
@@ -45,11 +50,13 @@ class ViewModel @Inject constructor(
     private var _theDocumentsAsList = MutableStateFlow<List<String>>(emptyList())
     override val theDocumentsAsList: StateFlow<List<String>>
         get() = _theDocumentsAsList
-    private var _theTrainingIDsAsList = MutableStateFlow<List<String>>(emptyList())
-    override val theTrainingIDsAsList: StateFlow<List<String>>
+
+    private var _theTrainingIDsAsList = MutableStateFlow<List<combinedData>>(emptyList())
+    override val theTrainingIDsAsList: StateFlow<List<combinedData>>
         get() = _theTrainingIDsAsList
-    private var _theRehabIDsAsList = MutableStateFlow<List<String>>(emptyList())
-    override val theRehabIDsAsList: StateFlow<List<String>>
+
+    private var _theRehabIDsAsList = MutableStateFlow<List<combinedData>>(emptyList())
+    override val theRehabIDsAsList: StateFlow<List<combinedData>>
         get() = _theRehabIDsAsList
 
     private val _currentDocument = MutableStateFlow(MyDocument())

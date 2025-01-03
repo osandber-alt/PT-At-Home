@@ -110,6 +110,7 @@ class RetrofitHandler {
                                 receiver.initNewDocument(
                                     MyHtmlParser.parseHtml2(post)
                                 )
+                                receiver.setRawHtml(post)
                             }
 
                         } else {
@@ -163,13 +164,15 @@ class RetrofitHandler {
                     if (response.isSuccessful) {
                         val post = response.body()
                         if (post != null) {
-
-
-
                             if(receiver is MyDocument){
                                 receiver.clearTrainingVideoId()
-                                for(j in post.items)
-                                    receiver.modifyTrainingVideoId(j.id.videoId)
+                                for(j in post.items){
+                                    receiver.modifyTrainingVideoId(
+                                        j.id.videoId,j.snippet.title,
+                                        intArrayOf(j.snippet.thumbnails.high.height,j.snippet.thumbnails.high.width),
+                                        j.snippet.thumbnails.high.url
+                                    )
+                                }
                             }
 
                         } else {
@@ -208,8 +211,13 @@ class RetrofitHandler {
 
                             if(receiver is MyDocument){
                                 receiver.clearRehabVideoId()
-                                for(j in post.items)
-                                    receiver.modifyRehabVideoId(j.id.videoId)
+                                for(j in post.items){
+                                    receiver.modifyRehabVideoId(
+                                        j.id.videoId,j.snippet.title,
+                                        intArrayOf(j.snippet.thumbnails.high.height,j.snippet.thumbnails.high.width),
+                                        j.snippet.thumbnails.high.url
+                                    )
+                                }
 
                             }
 
@@ -258,8 +266,11 @@ class RetrofitHandler {
     data class theRestCallDataClass(val extract:String, val html:String)
 
     data class theYoutubeRestCallDataClass(val items:List<theData2>)
-    data class theData2(val id:theData3)
+    data class theData2(val id:theData3, val snippet:theData4)
     data class theData3(val kind:String, val videoId:String)
+    data class theData4(val title:String, val thumbnails:theData5)
+    data class theData5(val default:theData6,val medium:theData6,val high:theData6)
+    data class theData6(val url:String, val width:Int, val height:Int)
 
     object RetrofitClient {
         fun createRetrofit(baseUrl: String) = Retrofit.Builder()

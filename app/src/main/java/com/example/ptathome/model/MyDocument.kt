@@ -1,13 +1,25 @@
 package com.example.ptathome.model
 
+import com.example.ptathome.ui.viewmodel.combinedData
+
 class MyDocument {
 
     //TODO: Temporary video detail, move to a new class
 
-    private var trainingVideoId:MutableList<String> = mutableListOf()
-    private var rehabVideoId:MutableList<String> = mutableListOf()
+    private var trainingVideoId:MutableList<combinedData> = mutableListOf()
+    private var rehabVideoId:MutableList<combinedData>  = mutableListOf()
 
     private var documentName:String = ""
+
+    private var theRawHtml:String =""
+
+    fun getRawHtml() = theRawHtml
+
+    fun getDocument() = theDocument
+
+    fun setRawHtml(html:String){
+        theRawHtml = html
+    }
 
     fun setName(name:String){
         documentName = name
@@ -23,16 +35,24 @@ class MyDocument {
         this.rehabVideoId.clear()
     }
 
-    fun modifyTrainingVideoId(videoId:String){
-        this.trainingVideoId.add(videoId)
+    fun modifyTrainingVideoId(
+        videoId: String,
+        videoTitle: String,
+        dimensions: IntArray,
+        url: String
+    ){
+        val local = combinedData(Triple(videoId,videoTitle,dimensions))
+        this.trainingVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
     }
 
-    fun modifyRehabVideoId(videoId:String){
-        this.rehabVideoId.add(videoId)
+    fun modifyRehabVideoId(videoId: String, videoTitle: String, dimensions: IntArray, url: String){
+        this.rehabVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
     }
 
 
-    fun getTrainingVideoId() = trainingVideoId
+    fun getTrainingVideoId():MutableList<combinedData>{
+        return trainingVideoId
+    }
     fun getTrainingVideoIdByIndex(index:Int) = trainingVideoId[index]
 
     fun getRehabVideoId() = rehabVideoId
