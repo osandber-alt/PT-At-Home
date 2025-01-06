@@ -63,8 +63,8 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
     var data2 by remember { mutableStateOf<List<combinedData>>(emptyList()) }
     var data3 by remember { mutableStateOf<List<combinedData>>(emptyList()) }
 
-    var videoIndex by remember {  mutableStateOf("") }
-    var videoIndex2 by remember {  mutableStateOf("") }
+    val videoIndex by viewModel.currentTrainingId.collectAsState()//remember {  mutableStateOf("") }
+    val videoIndex2 by viewModel.currentRehabId.collectAsState()//remember {  mutableStateOf("") }
 
     LaunchedEffect(documentsData,videoTrainingData,videoRehabData) {
         // Update the graph's data whenever listOfEntries changes
@@ -178,7 +178,8 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                                     contentDescription = null,
                                     modifier = Modifier.clickable(onClick = {
                                         expanded2 = false
-                                        videoIndex = entryList.theData.first
+                                        viewModel.modifyCurrentTrainingId(entryList.theData.first)
+                                    //videoIndex = entryList.theData.first
                                     })
                                 )
                             }
@@ -212,7 +213,8 @@ fun VideoScreen(navController: NavHostController, viewModel: ViewModel = hiltVie
                                     contentDescription = null,
                                     modifier = Modifier.clickable(onClick = {
                                         expanded3 = false
-                                        videoIndex2 = entryList.theData.first
+                                        viewModel.modifyCurrentRehabId(entryList.theData.first)
+                                        //videoIndex2 = entryList.theData.first
                                     })
                                 )
                             }

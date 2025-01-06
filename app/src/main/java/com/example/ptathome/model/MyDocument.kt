@@ -6,33 +6,45 @@ class MyDocument {
 
     //TODO: Temporary video detail, move to a new class
 
-    private var trainingVideoId:MutableList<combinedData> = mutableListOf()
-    private var rehabVideoId:MutableList<combinedData>  = mutableListOf()
+    private var youtubeDocument:YoutubeDocument = YoutubeDocument()
+    private var wikipediaDocument: WikipediaDocument = WikipediaDocument()
 
-    private var documentName:String = ""
+    fun getRawHtml() = wikipediaDocument.getRawHtml()
 
-    private var theRawHtml:String =""
-
-    fun getRawHtml() = theRawHtml
-
-    fun getDocument() = theDocument
+    fun getDocument() = wikipediaDocument.getDocument()
 
     fun setRawHtml(html:String){
-        theRawHtml = html
+        wikipediaDocument.setRawHtml(html)
     }
 
     fun setName(name:String){
-        documentName = name
+        wikipediaDocument.setName(name)
     }
 
-    fun getName() = documentName
+    fun getName() = wikipediaDocument.getName()
+
+    fun isEmpty()= wikipediaDocument.isEmpty()
+
+    fun initSummary(summary:String){
+        this.wikipediaDocument.initSummary(summary)
+    }
+
+    fun getSummary():String{
+        return wikipediaDocument.getSummary()
+    }
+
+    fun initNewDocument(theDocument: MutableList<Pair<String, String>>){
+        wikipediaDocument.initNewDocument(theDocument)
+    }
+
+    //-------------------------------------------------------------------
 
     fun clearTrainingVideoId(){
-        this.trainingVideoId.clear()
+        this.youtubeDocument.clearTrainingVideoId()
     }
 
     fun clearRehabVideoId(){
-        this.rehabVideoId.clear()
+        this.youtubeDocument.clearRehabVideoId()
     }
 
     fun modifyTrainingVideoId(
@@ -41,140 +53,21 @@ class MyDocument {
         dimensions: IntArray,
         url: String
     ){
-        val local = combinedData(Triple(videoId,videoTitle,dimensions))
-        this.trainingVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
+        this.youtubeDocument.modifyTrainingVideoId(videoId,videoTitle,dimensions,url)
     }
 
     fun modifyRehabVideoId(videoId: String, videoTitle: String, dimensions: IntArray, url: String){
-        this.rehabVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
+        this.youtubeDocument.modifyRehabVideoId(videoId,videoTitle,dimensions,url)
     }
 
 
     fun getTrainingVideoId():MutableList<combinedData>{
-        return trainingVideoId
+        return youtubeDocument.getTrainingVideoId()
     }
-    fun getTrainingVideoIdByIndex(index:Int) = trainingVideoId[index]
+    fun getTrainingVideoIdByIndex(index:Int) = this.youtubeDocument.getTrainingVideoIdByIndex(index)
 
-    fun getRehabVideoId() = rehabVideoId
-    fun getrehabVideoIdByIndex(index:Int) = rehabVideoId[index]
+    fun getRehabVideoId() = this.youtubeDocument.getRehabVideoId()
+    fun getrehabVideoIdByIndex(index:Int) = this.youtubeDocument.getrehabVideoIdByIndex(index)
 
-    // Pair(string,string) = Pair(The text, The tags)
-    private var theDocument: MutableList<Pair<String,String>> = mutableListOf()
-    private var theSummary: String = ""
-
-    fun isEmpty()= theDocument.isEmpty()
-
-    fun initSummary(summary:String){
-        this.theSummary = summary
-    }
-
-    fun getSummary():String{
-        return if(theSummary.isEmpty()) "No Summary here"
-        else this.theSummary
-    }
-
-    fun initNewDocument(theDocument: MutableList<Pair<String, String>>){
-        this.theDocument.clear()
-        this.theDocument = mutableListOf()
-        for(i in theDocument) this.theDocument.add(Pair(i.first, i.second))
-    }
-
-    fun getAllTags():MutableList<String>{
-        val localList = mutableListOf<String>()
-
-        for(i in theDocument) localList.add(i.second)
-
-        return localList
-    }
-
-    fun getAllSections(section:String):MutableList<String>{
-        val localList = mutableListOf<String>()
-
-        for(i in theDocument){
-            if(i.second == section) localList.add(i.first)
-        }
-
-        return localList
-    }
-
-    fun getAllBySection(section:String): MutableList<String> {
-        var theState = false
-        val theList = mutableListOf<String>()
-        for(i in this.theDocument){
-            if(i.second == "section" && i.first == section){
-                theState = true
-            }
-
-            else if(i.second == "section" && i.first != section){
-                theState = false
-            }
-
-            if(theState){
-                theList.add(i.first)
-            }
-
-        }
-
-        return theList
-    }
-
-    fun getAllHeadingBySection(section: String,heading:String): MutableList<String> {
-        var theState = false
-        val theList = mutableListOf<String>()
-        for(i in this.theDocument){
-            if(i.second == "section" && i.first == section){
-                theState = true
-            }
-
-            else if(i.second == "section" && i.first != section){
-                theState = false
-            }
-
-            if(theState && i.second == heading ){
-                theList.add(i.first)
-            }
-
-        }
-
-        return theList
-    }
-
-    fun getAllTextBySection(section: String,headingName:String):MutableList<String>{
-        var theState = false
-        var theHeadingState = false
-        val theList = mutableListOf<String>()
-        for(i in this.theDocument){
-            if(i.second == "section" && i.first == section){
-                theState = true
-            }
-
-            else if(i.second == "section" && i.first != section){
-                theState = false
-            }
-
-            if(i.first == headingName && theState){
-                theHeadingState = true
-            }
-
-            else if (i.first == headingName && theState){
-                theHeadingState = false
-            }
-
-            if(theState &&  theHeadingState && i.first != headingName ){
-                theList.add(i.first)
-            }
-
-        }
-
-        return theList
-    }
-
-    fun getUnformatedDocumentContents():MutableList<String>{
-        val localList = mutableListOf<String>()
-        for(i in theDocument){
-            localList.add(i.first)
-        }
-        return localList
-    }
 
 }

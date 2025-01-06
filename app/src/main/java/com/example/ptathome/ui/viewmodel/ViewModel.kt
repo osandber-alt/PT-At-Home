@@ -26,6 +26,9 @@ interface PtHomeViewModelInterface{
     val theTrainingIDsAsList: StateFlow<List<combinedData>>
     val theRehabIDsAsList: StateFlow<List<combinedData>>
 
+    val currentTrainingId:StateFlow<String>
+    val currentRehabId:StateFlow<String>
+
     fun startService(aList: Set<TypeOfService>, bodyPartSearch: String):Boolean
     fun isServiceComplete():Boolean
     fun setDocumentsByIndex(index:Int)
@@ -33,6 +36,9 @@ interface PtHomeViewModelInterface{
     fun setNewDocument(myDocument: MyDocument)
 
     fun updateContentListViews()
+
+    fun modifyCurrentTrainingId(value:String)
+    fun modifyCurrentRehabId(value: String)
 }
 
 data class combinedData(
@@ -58,6 +64,16 @@ class ViewModel @Inject constructor(
     private var _theRehabIDsAsList = MutableStateFlow<List<combinedData>>(emptyList())
     override val theRehabIDsAsList: StateFlow<List<combinedData>>
         get() = _theRehabIDsAsList
+
+    private var _currentTrainingId = MutableStateFlow("")
+    override val currentTrainingId: StateFlow<String>
+        get() = _currentTrainingId
+
+    private var _currentRehabId = MutableStateFlow("")
+    override val currentRehabId: StateFlow<String>
+        get() = _currentRehabId
+
+
 
     private val _currentDocument = MutableStateFlow(MyDocument())
     override val currentDocument: StateFlow<MyDocument>
@@ -93,6 +109,14 @@ class ViewModel @Inject constructor(
         println(local2)
         _theDocumentsAsList.value = local2
         println(_theDocumentsAsList.value)
+    }
+
+    override fun modifyCurrentTrainingId(value: String) {
+        _currentTrainingId.value = value
+    }
+
+    override fun modifyCurrentRehabId(value: String) {
+        _currentRehabId.value = value
     }
 
     override fun setDocumentsByIndex(index: Int) {
