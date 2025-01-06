@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ptathome.TouchGLSurfaceView
 import com.example.ptathome.ui.screens.HomeScreen
 import com.example.ptathome.ui.screens.VideoScreen
 import com.example.ptathome.ui.screens.WikipediaScreen

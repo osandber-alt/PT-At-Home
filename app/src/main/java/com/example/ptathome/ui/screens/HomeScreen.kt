@@ -1,6 +1,7 @@
 package com.example.ptathome.ui.screens
 
 import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,16 +26,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.example.labb3.Screen
+import com.example.ptathome.R
+import com.example.ptathome.TouchGLSurfaceView
 import com.example.ptathome.externalresources.restresources.TypeOfService
-import com.example.ptathome.ui.customcomposables.YoutubeVideoPlayer
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.ptathome.ui.customcomposables.TheBodyGraphicView
 
 val htmlText =  "<h2>What is Android?</h2>" + "<p>Android is an open source and Linux-based <b>Operating System</b> for mobile devices such as smartphones and tablet computers. Android was developed by the <i>Open Handset Alliance</i>, led by Google, and other companies.</p>" + "<p>Android offers a unified approach to application development for mobile devices which means developers need only develop for Android, and their applications should be able to run on different devices powered by Android.</p>" + "<p>The first beta version of the Android Software Development Kit (SDK) was released by Google in 2007 whereas the first commercial version, Android 1.0, was released in September 2008.</p>";
 
@@ -602,7 +602,10 @@ val testHetml =
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: ViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: ViewModel = hiltViewModel()
+) {
 
     val currentDocument by viewModel.currentDocument.collectAsState()
     var bodyPartSearch by remember { mutableStateOf("") }    // Longitude state
@@ -631,6 +634,11 @@ fun HomeScreen(navController: NavHostController, viewModel: ViewModel = hiltView
                         text = "Home Screen",
                         color = Color.DarkGray
                     )
+
+                    Box{
+                        TheBodyGraphicView()
+                    }
+
 
                     if(isComplete){
                         Spacer(Modifier.height(16.dp))

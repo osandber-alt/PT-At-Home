@@ -2,6 +2,7 @@ package com.example.ptathome
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,7 +26,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,8 +34,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,20 +44,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
 import com.example.labb3.PtAtHomeApp
-import com.example.labb3.Screen
 import com.example.ptathome.externalresources.htmlparser.MyHtmlParser
-import com.example.ptathome.externalresources.restresources.TypeOfService
-import com.example.ptathome.ui.screens.HomeScreen
 import com.example.ptathome.ui.screens.testHetml
 import com.example.ptathome.ui.theme.PTAtHomeTheme
 import com.example.ptathome.ui.viewmodel.ViewModel
@@ -69,12 +61,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: ViewModel
+    private lateinit var glSurfaceView: TouchGLSurfaceView
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
-
+        glSurfaceView = findViewById(R.id.glSurfaceView)
 
         enableEdgeToEdge()
         setContent {
@@ -106,6 +99,18 @@ class MainActivity : ComponentActivity() {
                 //TODO: Keep
                 //HomeScreen(navController, viewModel)
                 PtAtHomeApp(viewModel)
+                /*AndroidView(
+                    factory = { context ->
+                        val view = LayoutInflater.from(context).inflate(R.layout.activity_main, null, false)
+                        //val textView = view.findViewById<TextView>(R.id.text)
+
+                        // do whatever you want...
+                        view // return the view
+                    },
+                    update = { view ->
+                        // Update the view
+                    }
+                )*/
 
                 //MyHtmlParser.parseHtml2(testHetml)
                 //MyTestScreen(viewModel)
@@ -115,7 +120,19 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        //glSurfaceView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //glSurfaceView.onPause()
+    }
 }
+
+
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun MyTestScreen( viewModel: ViewModel = hiltViewModel()) {

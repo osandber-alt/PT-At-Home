@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-
+    implementation ("androidx.appcompat:appcompat:1.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation(libs.androidx.ui.viewbinding)
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
     //ksp("com.google.dagger:hilt-android-compiler:2.51.1")
     //implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
