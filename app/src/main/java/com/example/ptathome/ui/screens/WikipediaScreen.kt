@@ -13,45 +13,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.ptathome.ui.viewmodel.ViewModel
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.ptathome.externalresources.restresources.TypeOfService
-import com.example.ptathome.ui.customcomposables.YoutubeVideoPlayer
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.ptathome.ui.viewmodel.ViewModel
 
-
-
+/**
+ *
+ * The wikipedia screen, which is used to display the text from a wikipedia article
+ *
+ * @author Oscar Sandberg
+ */
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun WikipediaScreen(navController: NavHostController, viewModel: ViewModel = hiltViewModel()) {
 
     val currentDocument by viewModel.currentDocument.collectAsState()
-    var currentSize:MutableStateFlow<Int> = MutableStateFlow(-1)
-    val isComplete by viewModel.isComplete.collectAsState()
-    val isComplete2 by viewModel.isComplete2.collectAsState()
-    val lastService by viewModel.lastService.collectAsState()
-
-    var bodyPartSearch by remember { mutableStateOf("") }    // Longitude state
+    val isWikipediaServiceComplete by viewModel.isWikipediaServiceComplete.collectAsState()
 
     Scaffold(
     ) {
@@ -80,7 +68,7 @@ fun WikipediaScreen(navController: NavHostController, viewModel: ViewModel = hil
                     Spacer(Modifier.height(16.dp))
 
 
-                    if(isComplete){
+                    if(isWikipediaServiceComplete){
                         Text(
                             text = "Current Document = ${currentDocument.getName()}",
                             color = Color.DarkGray
@@ -106,7 +94,7 @@ fun WikipediaScreen(navController: NavHostController, viewModel: ViewModel = hil
                         )
                     }
 
-                    if(isComplete){
+                    if(isWikipediaServiceComplete){
                         Box(modifier = Modifier.fillMaxHeight()
                             .verticalScroll(rememberScrollState())){
                             Column {
@@ -165,7 +153,6 @@ fun WikipediaScreen(navController: NavHostController, viewModel: ViewModel = hil
                             //)
                         }
                     }
-
                 }
             }
         }

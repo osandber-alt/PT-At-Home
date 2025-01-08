@@ -14,6 +14,13 @@ import retrofit2.http.Query
 //TODO: Implement with the following link:
 // https://youtube.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDwnst2BtTY4jWPGVztQRHGdTshYT-2hCM&type=video&location=59.32,18.06&locationRadius=1000km&q=shoulder rehab exercise
 
+/**
+ *
+ * Implementation for handling network related operations with Retrofit.
+ *
+ * @author Oscar Sandberg
+ *
+ */
 class RetrofitHandler {
 
     companion object{
@@ -40,6 +47,8 @@ class RetrofitHandler {
             }
         }
 
+        // Run the wikipedia service.
+        // The service yields the summary and the HTML representation of a Wikipedia article.
         private fun<T:Any> runWikipediaService(
             baseURL: String,
             apiKey: String,
@@ -51,15 +60,17 @@ class RetrofitHandler {
             // Define the URL of the RESTful API you want to call
 
             for(i in topic){
+
+                // Run summary search
                 if(i == "summary"){
-                    val jsonPlaceholderService =
+                    val jsonWikipediaSummaryService =
                         RetrofitClient.createRetrofit(
                             baseURL//"https://en.wikipedia.org/api/rest_v1/"
                         )
-                            .create(JsonPlaceholderService::class.java)
+                            .create(JsonWikipediaSummaryService::class.java)
 
                     // Represents the call class
-                    val call: Call<theRestCallDataClass> = jsonPlaceholderService.getRestApiJsonService(
+                    val call: Call<WikipediaSummaryCallDataClass> = jsonWikipediaSummaryService.getRestApiJsonService(
                         i,title//"summary", "Shoulder"
                     )
 
@@ -68,7 +79,6 @@ class RetrofitHandler {
 
                     if (response.code() == 404) throw Exception("404 response")   // Throw an exception when coordinates are out of bounds
 
-                    // If successful, set the localWeatherState with the json data stored in the database
                     if (response.isSuccessful) {
                         val post = response.body()
 
@@ -83,12 +93,14 @@ class RetrofitHandler {
                         }
                     }
                 }
+
+                // Run html search
                 else if(i == "html"){
                     val jsonPlaceholderService =
                         RetrofitClient.createRetrofit2(
                             baseURL//"https://en.wikipedia.org/api/rest_v1/"
                         )
-                            .create(HtmlPlaceholderService::class.java)
+                            .create(HtmlWikipediaService::class.java)
 
                     // Represents the call class
                     val call: Call<String> = jsonPlaceholderService.getRestApiJsonService(
@@ -123,6 +135,8 @@ class RetrofitHandler {
 
         }
 
+        // Run the youtube service.
+        // The service yields the following data: Video Id, Video title and Thumbnail url.
         private fun<T:Any> runYoutubeService(
             baseURL: String,
             apiKey: String,
@@ -136,16 +150,20 @@ class RetrofitHandler {
             if(receiver is MyDocument){
                 receiver.setName(title)
             }
+
+            // Get video information when searching for a specific topic.
+            // The topic is defined in the RestServices.kt class.
             for(i in topic){
+                // Get videos from exercise topic
                 if(i == "exercise"){
                     val jsonPlaceholderService =
                         RetrofitClient.createRetrofit(
                             baseURL
                         )
-                            .create(JsonYoutubePlaceholderService::class.java)
+                            .create(JsonYoutubeInfoService::class.java)
 
                     // Represents the call class
-                    val call: Call<theYoutubeRestCallDataClass> =
+                    val call: Call<TheYoutubeRestCallDataClass> =
                         jsonPlaceholderService.getRestApiJsonService(
                             "snippet",
                             apiKey,
@@ -160,14 +178,13 @@ class RetrofitHandler {
 
                     if (response.code() == 404) throw Exception("404 response")   // Throw an exception when coordinates are out of bounds
 
-                    // If successful, set the localWeatherState with the json data stored in the database
                     if (response.isSuccessful) {
                         val post = response.body()
                         if (post != null) {
                             if(receiver is MyDocument){
                                 receiver.clearTrainingVideoId()
                                 for(j in post.items){
-                                    receiver.modifyTrainingVideoId(
+                                    receiver.addTrainingVideoId(
                                         j.id.videoId,j.snippet.title,
                                         intArrayOf(j.snippet.thumbnails.high.height,j.snippet.thumbnails.high.width),
                                         j.snippet.thumbnails.high.url
@@ -181,15 +198,16 @@ class RetrofitHandler {
                     }
                 }
 
+                // Get videos from rehab topic
                 else if(i == "rehab"){
                     val jsonPlaceholderService =
                         RetrofitClient.createRetrofit(
                             baseURL
                         )
-                            .create(JsonYoutubePlaceholderService::class.java)
+                            .create(JsonYoutubeInfoService::class.java)
 
                     // Represents the call class
-                    val call: Call<theYoutubeRestCallDataClass> =
+                    val call: Call<TheYoutubeRestCallDataClass> =
                         jsonPlaceholderService.getRestApiJsonService(
                             "snippet",
                             apiKey,
@@ -212,7 +230,7 @@ class RetrofitHandler {
                             if(receiver is MyDocument){
                                 receiver.clearRehabVideoId()
                                 for(j in post.items){
-                                    receiver.modifyRehabVideoId(
+                                    receiver.addRehabVideoId(
                                         j.id.videoId,j.snippet.title,
                                         intArrayOf(j.snippet.thumbnails.high.height,j.snippet.thumbnails.high.width),
                                         j.snippet.thumbnails.high.url
@@ -235,15 +253,17 @@ class RetrofitHandler {
     }
 
 
-    interface JsonPlaceholderService {
+    // Json data for wikipedia rest service
+    interface JsonWikipediaSummaryService {
         @GET("page/{pageType}/{topic}")
         fun getRestApiJsonService(
             @Path("pageType") pageType: String,
             @Path("topic") topic: String
-        ): Call<theRestCallDataClass>
+        ): Call<WikipediaSummaryCallDataClass>
     }
     // example: https://youtube.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDwnst2BtTY4jWPGVztQRHGdTshYT-2hCM&q=shoulder exercise
-    interface JsonYoutubePlaceholderService {
+    // Json data for youtube rest service
+    interface JsonYoutubeInfoService {
         @GET("search")
         fun getRestApiJsonService(
             @Query ("part") part:String,
@@ -252,10 +272,11 @@ class RetrofitHandler {
             @Query ("location") location:String,
             @Query ("locationRadius") locationRadius:String,
             @Query ("q") q:String
-        ): Call<theYoutubeRestCallDataClass>
+        ): Call<TheYoutubeRestCallDataClass>
     }
 
-    interface HtmlPlaceholderService {
+    // String data for wikipedia rest service
+    interface HtmlWikipediaService {
         @GET("page/{pageType}/{topic}")
         fun getRestApiJsonService(
             @Path("pageType") pageType: String,
@@ -263,14 +284,16 @@ class RetrofitHandler {
         ): Call<String>
     }
 
-    data class theRestCallDataClass(val extract:String, val html:String)
+    // Summary data for Wikipedia
+    data class WikipediaSummaryCallDataClass(val extract:String, val html:String)
 
-    data class theYoutubeRestCallDataClass(val items:List<theData2>)
-    data class theData2(val id:theData3, val snippet:theData4)
-    data class theData3(val kind:String, val videoId:String)
-    data class theData4(val title:String, val thumbnails:theData5)
-    data class theData5(val default:theData6,val medium:theData6,val high:theData6)
-    data class theData6(val url:String, val width:Int, val height:Int)
+
+    data class TheYoutubeRestCallDataClass(val items:List<YoutubeItem>)
+    data class YoutubeItem(val id:VideoIdAndKind, val snippet:SnippetData)
+    data class VideoIdAndKind(val kind:String, val videoId:String)
+    data class SnippetData(val title:String, val thumbnails:ThumbnailsData)
+    data class ThumbnailsData(val default:ThumbNailData, val medium:ThumbNailData, val high:ThumbNailData)
+    data class ThumbNailData(val url:String, val width:Int, val height:Int)
 
     object RetrofitClient {
         fun createRetrofit(baseUrl: String) = Retrofit.Builder()

@@ -2,7 +2,6 @@ package com.example.ptathome
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -47,27 +46,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.labb3.PtAtHomeApp
 import com.example.ptathome.externalresources.htmlparser.MyHtmlParser
 import com.example.ptathome.ui.screens.testHetml
 import com.example.ptathome.ui.theme.PTAtHomeTheme
 import com.example.ptathome.ui.viewmodel.ViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ *
+ * Main Activity for the PT At Home application.
+ *
+ * @author Oscar Sandberg
+ * @author Martin Harutyunyan
+ *
+ */
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: ViewModel
-    private lateinit var glSurfaceView: TouchGLSurfaceView
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
-        glSurfaceView = findViewById(R.id.glSurfaceView)
 
         enableEdgeToEdge()
         setContent {
@@ -99,18 +103,6 @@ class MainActivity : ComponentActivity() {
                 //TODO: Keep
                 //HomeScreen(navController, viewModel)
                 PtAtHomeApp(viewModel)
-                /*AndroidView(
-                    factory = { context ->
-                        val view = LayoutInflater.from(context).inflate(R.layout.activity_main, null, false)
-                        //val textView = view.findViewById<TextView>(R.id.text)
-
-                        // do whatever you want...
-                        view // return the view
-                    },
-                    update = { view ->
-                        // Update the view
-                    }
-                )*/
 
                 //MyHtmlParser.parseHtml2(testHetml)
                 //MyTestScreen(viewModel)
@@ -119,16 +111,6 @@ class MainActivity : ComponentActivity() {
                 //MyTryOnDropDownMenu2()
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //glSurfaceView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //glSurfaceView.onPause()
     }
 }
 
@@ -139,7 +121,7 @@ fun MyTestScreen( viewModel: ViewModel = hiltViewModel()) {
 
     val currentDocument by viewModel.currentDocument.collectAsState()
     var bodyPartSearch by remember { mutableStateOf("") }    // Longitude state
-    val isComplete by viewModel.isComplete.collectAsState()
+    val isComplete by viewModel.isWikipediaServiceComplete.collectAsState()
     val x = MyHtmlParser.parseHtml2(testHetml)
 
         Scaffold(

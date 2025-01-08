@@ -75,14 +75,5 @@ constructor()
         //println(y.extract)
     }
 
-    //TODO: Modify
-    /*fun toJson(weathersState: WeathersState):String{
-        return gson!!.toJson(weathersState, WeathersState::class.java)
-    }
-
-    fun fromJson(weathersState: String): WeathersState {
-        return gson!!.fromJson(weathersState, WeathersState::class.java)
-    }*/
-
 
 }

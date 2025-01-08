@@ -11,6 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 
+/**
+ * A view which is used to display a youtube video from a video id.
+ *
+ * The resource used to get this to work is from the following Stack Overflow Article:
+ * https://stackoverflow.com/questions/76538826/how-to-implement-youtube-iframe-player-api-in-android-using-kotlin-and-jetpack-c
+ *
+ * @author Oscar Sandberg
+ *
+ */
+
 @Composable
 fun YoutubeVideoPlayer(videoId: String,
 //                       width: Int

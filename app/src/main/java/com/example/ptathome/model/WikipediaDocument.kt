@@ -1,13 +1,23 @@
 package com.example.ptathome.model
 
+/**
+ *
+ * A class for representing the wikipedia document.
+ *
+ * It contains data related to a wikipedia article.
+ *
+ * @author Oscar Sandberg
+ *
+ */
 class WikipediaDocument {
 
-    private var theRawHtml:String =""
+    private var theRawHtml:String =""   // The raw html response data
     private var theDocument: MutableList<Pair<String,String>> = mutableListOf()
-    private var theSummary: String = ""
-    private var documentName:String = ""
+    private var theSummary: String = ""     // The summary of the wikipedia article
+    private var documentName:String = ""    // The name of the wikipedia article
 
     fun getRawHtml() = theRawHtml
+
     fun setRawHtml(html:String){
         theRawHtml = html
     }
@@ -17,18 +27,28 @@ class WikipediaDocument {
     fun setName(name:String){
         documentName = name
     }
+
     fun getName() = documentName
 
+    /**
+     *
+     * Initialize a new wikipedia document from a mutable list
+     *
+     * @param theDocument, the new document to initialize
+     *
+     */
     fun initNewDocument(theDocument: MutableList<Pair<String, String>>){
         this.theDocument.clear()
         this.theDocument = mutableListOf()
         for(i in theDocument) this.theDocument.add(Pair(i.first, i.second))
     }
+
     fun isEmpty()= theDocument.isEmpty()
 
     fun initSummary(summary:String){
         this.theSummary = summary
     }
+
     fun getSummary():String{
         return if(theSummary.isEmpty()) "No Summary here"
         else this.theSummary

@@ -8,6 +8,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Inject and provide Network manager and Gson manager with dagger hilt
+ *
+ * @author Oscar Sandberg
+ */
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {

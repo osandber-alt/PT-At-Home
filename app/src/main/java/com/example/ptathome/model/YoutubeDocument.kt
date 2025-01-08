@@ -1,10 +1,17 @@
 package com.example.ptathome.model
 
-import com.example.ptathome.ui.viewmodel.combinedData
-
+/**
+ *
+ * A class for representing the youTube document.
+ *
+ * It contains data related to a collection of youtube videos.
+ *
+ * @author Oscar Sandberg
+ *
+ */
 class YoutubeDocument {
-    private var trainingVideoId:MutableList<combinedData> = mutableListOf()
-    private var rehabVideoId:MutableList<combinedData>  = mutableListOf()
+    private var trainingVideoId:MutableList<CombinedWikipediaYoutubeData> = mutableListOf()
+    private var rehabVideoId:MutableList<CombinedWikipediaYoutubeData>  = mutableListOf()
 
     fun clearTrainingVideoId(){
         this.trainingVideoId.clear()
@@ -14,26 +21,28 @@ class YoutubeDocument {
         this.rehabVideoId.clear()
     }
 
-    fun modifyTrainingVideoId(
+    fun addTrainingVideoId(
         videoId: String,
         videoTitle: String,
         dimensions: IntArray,
         url: String
     ){
-        this.trainingVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
+        this.trainingVideoId.add(CombinedWikipediaYoutubeData(Triple(videoId,videoTitle,dimensions),url))
     }
 
-    fun modifyRehabVideoId(videoId: String, videoTitle: String, dimensions: IntArray, url: String){
-        this.rehabVideoId.add(combinedData(Triple(videoId,videoTitle,dimensions),url))
+    fun addRehabVideoId(videoId: String, videoTitle: String, dimensions: IntArray, url: String){
+        this.rehabVideoId.add(CombinedWikipediaYoutubeData(Triple(videoId,videoTitle,dimensions),url))
     }
 
 
-    fun getTrainingVideoId():MutableList<combinedData>{
+    fun getTrainingVideoId():MutableList<CombinedWikipediaYoutubeData>{
         return trainingVideoId
     }
+
     fun getTrainingVideoIdByIndex(index:Int) = trainingVideoId[index]
 
     fun getRehabVideoId() = rehabVideoId
-    fun getrehabVideoIdByIndex(index:Int) = rehabVideoId[index]
+
+    fun getRehabVideoIdByIndex(index:Int) = rehabVideoId[index]
 
 }

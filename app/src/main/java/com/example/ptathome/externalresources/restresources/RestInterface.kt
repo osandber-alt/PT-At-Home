@@ -4,6 +4,13 @@ import com.example.ptathome.externalresources.network.NetworkManager
 import com.example.ptathome.model.MyDocument
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ *
+ * Rest interface which describes what a rest service implementation can do.
+ *
+ * @author Oscar Sandberg
+ *
+ */
 abstract class RestInterface {
 
     abstract fun <T:Any> runRestService(

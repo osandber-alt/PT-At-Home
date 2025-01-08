@@ -2,6 +2,19 @@ package com.example.ptathome.externalresources.restresources
 
 import javax.inject.Inject
 
+/**
+ *
+ * The specific Wikipedia and Youtube rest service implementations
+ *
+ * @author Oscar Sandberg
+ *
+ */
+
+/**
+ *
+ * The specific Wikipedia rest service implementation
+ *
+ */
 class WikipediaRestService @Inject constructor(
 ): GenericRestService(
     "https://en.wikipedia.org/api/rest_v1/",
@@ -10,7 +23,11 @@ class WikipediaRestService @Inject constructor(
     "Shoulder"
 )
 
-//TODO: Implement later
+/**
+ *
+ * The specific Youtube rest service implementation
+ *
+ */
 class YoutubeRestService @Inject constructor():
     GenericRestService(
         "https://youtube.googleapis.com/youtube/v3/",
